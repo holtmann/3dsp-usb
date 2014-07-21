@@ -1703,6 +1703,15 @@ VOID Task_Normal_Send_Event(PBT_DEVICE_EXT devExt, UINT8 eventcode, UINT8 urgent
                     case BT_HCI_COMMAND_WRITE_VOICE_SETTING:
                         Hci_Response_Write_Voice_Setting(devExt, dest, &OutLen);
                         break;
+                    case BT_HCI_COMMAND_READ_NUMBER_OF_SUPPORTED_IAC:
+                        Hci_Response_Read_Num_Of_Supported_Iac(devExt, dest, &OutLen);
+                        break;
+                    case BT_HCI_COMMAND_READ_CURRENT_IAC_LAP:
+                        Hci_Response_Read_Current_Iac_Lap(devExt, dest, &OutLen);
+                        break;
+                    case BT_HCI_COMMAND_SET_EVENT_MASK:
+                        Hci_Response_Set_Event_Mask(devExt, dest, &OutLen);
+                        break;
 					default:
 						BT_DBGEXT(ZONE_TASK | LEVEL1,  "OCF does not support for OGF HOST_CONTROLLER_BASEBAND\n");
 						Hci_Response_Unknown_Command(devExt, dest, &OutLen);
@@ -1745,6 +1754,9 @@ VOID Task_Normal_Send_Event(PBT_DEVICE_EXT devExt, UINT8 eventcode, UINT8 urgent
 					break;
 				case BT_HCI_COMMAND_READ_LINK_POLICY_SETTINGS:
 					Hci_Response_Read_Link_Policy_Settings(devExt, dest, &OutLen);
+					break;
+				case BT_HCI_COMMAND_WRITE_DEFAULT_LINK_POLICY_SETTINGS:
+					Hci_Response_Write_Default_Link_Policy_Settings(devExt, dest, &OutLen);
 					break;
 				default:
 					BT_DBGEXT(ZONE_TASK | LEVEL1,  "OCF does not support for OGF LINK_POLICY\n");

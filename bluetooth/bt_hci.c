@@ -14954,6 +14954,148 @@ VOID Hci_Command_Write_Voice_Setting(PBT_DEVICE_EXT devExt, UINT16 VoiceSetting)
 }
 
 /**************************************************************************
+ *   Hci_Command_Read_Num_Of_Supported_Iac
+ *
+ *   Descriptions:
+ *      Read_Num_Of_Supported_Iac.
+ *   Arguments:
+ *      devExt: IN, pointer to device extension of device to start.
+ *  
+ *   Return Value:
+ *      None
+ *************************************************************************/
+VOID Hci_Command_Read_Num_Of_Supported_Iac(PBT_DEVICE_EXT devExt)
+{
+	KIRQL oldIrql;
+	PBT_HCI_T pHci;
+	UINT8 eventcode;
+
+	pHci = (PBT_HCI_T)devExt->pHci;
+
+	BT_DBGEXT(ZONE_HCI | LEVEL2, "Hci_Command_Read_Num_Of_Supported_Iac Enter!\n");
+
+	KeAcquireSpinLock ( &pHci->HciLock, &oldIrql );
+
+	if (pHci->command_state != BT_COMMAND_STATE_IDLE)
+	{
+		BT_DBGEXT(ZONE_HCI | LEVEL1, "Another command but prior command not completed. Ignore it!\n");
+		KeReleaseSpinLock ( &pHci->HciLock, oldIrql );
+		return;
+		
+	}
+	else
+	{
+		pHci->command_state = BT_COMMAND_STATE_WAIT_COMPLETE;
+		pHci->command_status = BT_HCI_STATUS_SUCCESS;
+		pHci->current_opcode = BT_MAKE_OPCODE(BT_HCI_COMMAND_OGF_HOST_CONTROLLER_BASEBAND, BT_HCI_COMMAND_READ_NUMBER_OF_SUPPORTED_IAC);
+	}
+	
+	KeReleaseSpinLock ( &pHci->HciLock, oldIrql );
+
+	Task_Normal_Send_Event(devExt, BT_HCI_EVENT_COMMAND_COMPLETE, 1);
+}
+
+
+/**************************************************************************
+ *   Hci_Response_Read_Num_Of_Supported_Iac
+ *
+ *   Descriptions:
+ *      Send HC command_complete event to respond to the HCI command Read_Num_Of_Supported_Iac
+ *   Arguments:
+ *      devExt: IN, pointer to device extension of device to start.
+ *      buf: IN, destination buffer
+ *      pOutLen: IN, output length
+ *   Return Value:
+ *		None 
+ *************************************************************************/
+VOID Hci_Response_Read_Num_Of_Supported_Iac(PBT_DEVICE_EXT devExt, PUINT8 dest, PUINT16 pOutLen)
+{
+	PBT_HCI_T pHci;
+	
+	pHci = (PBT_HCI_T)devExt->pHci;
+
+	*dest = pHci->command_status;
+	dest += sizeof(UINT8);
+
+	*dest=BT_MAX_IAC_LAP_NUM;
+	dest += sizeof(UINT8);
+	
+	*pOutLen = 2;
+}
+
+/**************************************************************************
+ *   Hci_Command_Read_Current_Iac_Lap
+ *
+ *   Descriptions:
+ *      Read_Current_Iac_Lap.
+ *   Arguments:
+ *      devExt: IN, pointer to device extension of device to start.
+ *  
+ *   Return Value:
+ *      None
+ *************************************************************************/
+VOID Hci_Command_Read_Current_Iac_Lap(PBT_DEVICE_EXT devExt)
+{
+	KIRQL oldIrql;
+	PBT_HCI_T pHci;
+	UINT8 eventcode;
+
+	pHci = (PBT_HCI_T)devExt->pHci;
+
+	BT_DBGEXT(ZONE_HCI | LEVEL2, "Hci_Command_Read_Current_Iac_Lap Enter!\n");
+
+	KeAcquireSpinLock ( &pHci->HciLock, &oldIrql );
+
+	if (pHci->command_state != BT_COMMAND_STATE_IDLE)
+	{
+		BT_DBGEXT(ZONE_HCI | LEVEL1, "Another command but prior command not completed. Ignore it!\n");
+		KeReleaseSpinLock ( &pHci->HciLock, oldIrql );
+		return;
+		
+	}
+	else
+	{
+		pHci->command_state = BT_COMMAND_STATE_WAIT_COMPLETE;
+		pHci->command_status = BT_HCI_STATUS_SUCCESS;
+		pHci->current_opcode = BT_MAKE_OPCODE(BT_HCI_COMMAND_OGF_HOST_CONTROLLER_BASEBAND, BT_HCI_COMMAND_READ_CURRENT_IAC_LAP);
+	}
+	
+	KeReleaseSpinLock ( &pHci->HciLock, oldIrql );
+
+	Task_Normal_Send_Event(devExt, BT_HCI_EVENT_COMMAND_COMPLETE, 1);
+}
+
+
+/**************************************************************************
+ *   Hci_Response_Read_Current_Iac_Lap
+ *
+ *   Descriptions:
+ *      Send HC command_complete event to respond to the HCI command Read_Current_Iac_Lap
+ *   Arguments:
+ *      devExt: IN, pointer to device extension of device to start.
+ *      buf: IN, destination buffer
+ *      pOutLen: IN, output length
+ *   Return Value:
+ *		None 
+ *************************************************************************/
+VOID Hci_Response_Read_Current_Iac_Lap(PBT_DEVICE_EXT devExt, PUINT8 dest, PUINT16 pOutLen)
+{
+	PBT_HCI_T pHci;
+	
+	pHci = (PBT_HCI_T)devExt->pHci;
+
+	*dest = pHci->command_status;
+	dest += sizeof(UINT8);
+
+	*dest=pHci->num_current_iac;
+	dest += sizeof(UINT8);
+
+        RtlCopyMemory(dest, (PUINT8) &(pHci->iac_lap[0]), pHci->num_current_iac * BT_EACH_IAC_LAP_COUNT);
+	
+	*pOutLen = 2 + pHci->num_current_iac * BT_EACH_IAC_LAP_COUNT;
+}
+
+/**************************************************************************
  *   Hci_Response_Write_Voice_Setting
  *
  *   Descriptions:

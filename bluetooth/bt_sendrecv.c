@@ -490,6 +490,9 @@ NTSTATUS BtProcessTxCommand(PBT_DEVICE_EXT devExt, PUINT8 buf, UINT32 len)
 			case BT_HCI_COMMAND_FLOW_SPECIFICATION:
 				Hci_Command_Flow_Specification(devExt, pParam);
 				break;
+			case BT_HCI_COMMAND_WRITE_DEFAULT_LINK_POLICY_SETTINGS:
+				Hci_Command_Write_Default_Link_Policy_Settings(devExt, *(PUINT16)pParam);
+				break;
 			default:
 				invalidflag = 1;
 			}
@@ -638,6 +641,15 @@ NTSTATUS BtProcessTxCommand(PBT_DEVICE_EXT devExt, PUINT8 buf, UINT32 len)
                 break;
             case BT_HCI_COMMAND_WRITE_VOICE_SETTING:
                 Hci_Command_Write_Voice_Setting(devExt, *(PUINT16)pParam);
+                break;
+            case BT_HCI_COMMAND_READ_NUMBER_OF_SUPPORTED_IAC:
+                Hci_Command_Read_Num_Of_Supported_Iac(devExt);
+                break;
+            case BT_HCI_COMMAND_READ_CURRENT_IAC_LAP:
+                Hci_Command_Read_Current_Iac_Lap(devExt);
+                break;
+            case BT_HCI_COMMAND_SET_EVENT_MASK:
+                Hci_Command_Set_Event_Mask(devExt, pParam);
                 break;
 			default:
 				if (pCommandHead->opcode.ocf == BT_HCI_COMMAND_FLUSH)

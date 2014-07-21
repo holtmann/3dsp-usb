@@ -2347,6 +2347,12 @@ VOID Hci_Response_Read_Voice_Setting(PBT_DEVICE_EXT devExt, PUINT8 dest, PUINT16
 VOID Hci_Command_Write_Voice_Setting(PBT_DEVICE_EXT devExt, UINT16 VoiceSetting);
 VOID Hci_Response_Write_Voice_Setting(PBT_DEVICE_EXT devExt, PUINT8 dest, PUINT16 pOutLen);
 
+VOID Hci_Command_Read_Num_Of_Supported_Iac(PBT_DEVICE_EXT devExt);
+VOID Hci_Response_Read_Num_Of_Supported_Iac(PBT_DEVICE_EXT devExt, PUINT8 dest, PUINT16 pOutLen);
+
+VOID Hci_Command_Read_Current_Iac_Lap(PBT_DEVICE_EXT devExt);
+VOID Hci_Response_Read_Current_Iac_Lap(PBT_DEVICE_EXT devExt, PUINT8 dest, PUINT16 pOutLen);
+
 VOID Hci_Command_Read_Num_Broadcast_Retransmissions(PBT_DEVICE_EXT devExt);
 VOID Hci_Response_Read_Num_Broadcast_Retransmissions(PBT_DEVICE_EXT devExt, PUINT8 dest, PUINT16 pOutLen);
 
