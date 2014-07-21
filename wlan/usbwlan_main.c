@@ -6374,7 +6374,7 @@ TDSP_STATUS Adap_GetT8051Fw(PDSP_ADAPTER_T pAdap)
     TDSP_STATUS Status = STATUS_FAILURE;
 	PSP20_FILE_HEAD_T pSp20_file_head = NULL;
     PUINT8 code_buf = NULL;
-    UINT8  bin_name[] = {"/usr/local/3DSP/usb/3dspcode.bin"};
+    UINT8  bin_name[] = {"/lib/firmware/3dspcode.bin"};
     if(pAdap->fw_8051valid == TRUE && pAdap->fw_buf != NULL)
     {
         DBG_WLAN__INIT(LEVEL_TRACE,"Get 8051 file return with has saved in variable\n");
@@ -6489,7 +6489,7 @@ TDSP_STATUS Adap_GetDspFw(PDSP_ADAPTER_T pAdap)
 	PSP20_FILE_HEAD_T pSp20_file_head = NULL;
     PUINT8  code_buf = NULL;
 
-    UINT8  bin_name[] = {"/usr/local/3DSP/usb/3dspcode.bin"};
+    UINT8  bin_name[] = {"/lib/firmware/3dspcode.bin"};
 
     if(pAdap->fw_dspvalid== TRUE && pAdap->fw_buf!= NULL)
     {

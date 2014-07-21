@@ -91,7 +91,7 @@ NTSTATUS DownLoad8051FirmWare(IN PBT_DEVICE_EXT devExt)
 {
 
 #ifdef BT_DOWNLOAD_BIN_WITH_FILE_MODE // @20080928 by glen for bin code file support
-	PUINT8 filename = "/usr/local/3DSP/usb/3dspcode.bin";
+	PUINT8 filename = "/lib/firmware/3dspcode.bin";
 	struct file * filp = NULL;
 	UINT32				BinCodeLen;
 	PUINT8				pBinDataBuf= NULL;			
@@ -508,7 +508,7 @@ NTSTATUS  DownLoad3DspFirmWare(IN PBT_DEVICE_EXT devExt, BOOLEAN GotoMainLoop)
 	NTSTATUS ntStatus = STATUS_SUCCESS;
 
 #ifdef BT_DOWNLOAD_BIN_WITH_FILE_MODE // @20080928 by glen for bin code file support		
-	PUINT8 filename = "/usr/local/3DSP/usb/3dspcode.bin";
+	PUINT8 filename = "/lib/firmware/3dspcode.bin";
 	struct file * filp = NULL;
 	UINT32				BinCodeLen;
 	PUINT8				pBinDataBuf= NULL;			
