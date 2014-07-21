@@ -134,6 +134,6 @@ module:
 
 clean:
 	rm -f */*.o */.*.o.d */.*.o.cmd
-	rm -f *.o *~ core .depend .*.cmd *.ko *.mod.c
-	rm -f Module.markers Module.symvers modules.order
-	rm -rf .tmp_versions Modules.symvers $(hostprogs-y)
+	rm -f *.o .*.cmd *.ko *.mod.c
+	rm -f Module.symvers modules.order
+	rm -rf .tmp_versions $(hostprogs-y)
