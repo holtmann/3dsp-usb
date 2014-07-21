@@ -89,6 +89,7 @@ void DiagWorkFunc(PVOID pvoid)
 	wake_up_interruptible(&devExt->diagEvent);
 }
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 12, 0)
 // Diagnose the system
 static void DiagSys(PBT_DEVICE_EXT	devExt)
 {
@@ -170,8 +171,10 @@ static void DiagSys(PBT_DEVICE_EXT	devExt)
     devExt->diagFlag = 0;
     BT_INFOEXT("----------------- END -----------------\n");
 }
+#endif
 
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 12, 0)
 /* Device IOCTL */
 static int hci_usb_ioctl(struct hci_dev *hdev, unsigned int cmd, unsigned long arg)
 {
@@ -360,6 +363,7 @@ static int hci_usb_ioctl(struct hci_dev *hdev, unsigned int cmd, unsigned long a
 		kfree(u_reg);
 	return errcode;
 }
+#endif
 
 static int OpenDev(PBT_DEVICE_EXT devExt)
 {
@@ -628,10 +632,15 @@ static void do_cc(struct sk_buff *skb)
  * Return the send status, 0 for success. Actually the return status
  * is never used in the BlueZ stack, so it's not important
  */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 12, 0)
+static int hci_usb_send_frame(struct hci_dev *hdev, struct sk_buff *skb)
+{
+#else
 static int hci_usb_send_frame(struct sk_buff *skb)
 {
-    int retval = 0;
 	struct hci_dev *hdev = (struct hci_dev *) skb->dev;
+#endif
+    int retval = 0;
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 4, 9)	
 	PBT_DEVICE_EXT	devExt = hci_get_drvdata(hdev);
 #else
@@ -707,6 +716,7 @@ static int hci_usb_send_frame(struct sk_buff *skb)
 }
 
 
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 4, 9)
 static void hci_usb_destruct(struct hci_dev *hdev)
 {
     ENTER_FUNC();
@@ -714,6 +724,7 @@ static void hci_usb_destruct(struct hci_dev *hdev)
    
     EXIT_FUNC();
 }
+#endif
 
 static void hci_usb_notify(struct hci_dev *hdev, unsigned int evt)
 {
@@ -798,7 +809,9 @@ void *register_HCI_device(void *dev)
 	hdev->owner = THIS_MODULE;
 #endif
 	hdev->notify   = hci_usb_notify;
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3, 12, 0)
 	hdev->ioctl    = hci_usb_ioctl;
+#endif
     
    	devExt->hdev = hdev;
 
@@ -1092,6 +1105,9 @@ static struct usb_driver hci_usb_driver = {
 /* Wrapper of hc_recv_frame */
 int hci_notify_frame(struct sk_buff *skb)
 {
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 12, 0)
+    struct hci_dev *hdev = (struct hci_dev *) skb->dev;
+#endif
     BT_DBGEXT(ZONE_MAIN | LEVEL3, "Notify up HCI frames\n");
 
     /* Filter out the HCI Event */
@@ -1099,7 +1115,11 @@ int hci_notify_frame(struct sk_buff *skb)
        do_cc(skb); 
     }
 
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 12, 0)
+    hci_recv_frame(hdev, skb);
+#else
     hci_recv_frame(skb);
+#endif
 
     return 0;
 }
