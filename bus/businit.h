@@ -49,7 +49,9 @@
 
     #include "basetype.h"
 
+    #ifndef DBG
     #define DBG
+    #endif
 
     #define BUS_CONFIG_FILE  "/etc/tdspbus.cfg"
     #define BUS_CONFIG_SECTION  "busparam"

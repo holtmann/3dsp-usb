@@ -116,6 +116,7 @@ DEFS += -DBT_SNIFF_ONLY_ONE_CONNECTION
 
 EXTRA_CFLAGS = \
 	$(DEFS) \
+	-DDBG \
 	-Wno-unused-variable \
 	-Wno-parentheses \
 	-Wno-format \
